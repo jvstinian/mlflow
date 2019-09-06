@@ -7,6 +7,7 @@ Create Date: 2019-07-30 16:36:54.256382
 """
 from alembic import op
 import sqlalchemy as sa
+from mlflow.store.dbmodels.initial_models import SqlTag, SqlParam
 
 
 # revision identifiers, used by Alembic.
@@ -17,6 +18,11 @@ depends_on = None
 
 
 def upgrade():
+    bind = op.get_bind()
+    SqlTag.__table__.create(bind = bind.engine, checkfirst = True)
+    # Not sure when to table params was introduced, but putting it here.
+    SqlParam.__table__.create(bind = bind.engine, checkfirst = True)
+
     # Use batch mode so that we can run "ALTER TABLE" statements against SQLite
     # databases (see more info at https://alembic.sqlalchemy.org/en/latest/
     # batch.html#running-batch-migrations-for-sqlite-and-other-databases)
