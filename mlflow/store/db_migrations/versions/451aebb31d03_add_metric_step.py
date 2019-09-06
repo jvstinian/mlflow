@@ -7,7 +7,7 @@ Create Date: 2019-04-22 15:29:24.921354
 """
 from alembic import op
 import sqlalchemy as sa
-
+from mlflow.store.dbmodels.initial_models import SqlMetric
 
 # revision identifiers, used by Alembic.
 revision = '451aebb31d03'
@@ -17,6 +17,9 @@ depends_on = None
 
 
 def upgrade():
+    bind = op.get_bind()
+    SqlMetric.__table__.create(bind = bind.engine, checkfirst = True)
+
     op.add_column('metrics', sa.Column('step', sa.BigInteger(), nullable=False, server_default='0'))
     # Use batch mode so that we can run "ALTER TABLE" statements against SQLite
     # databases (see more info at https://alembic.sqlalchemy.org/en/latest/

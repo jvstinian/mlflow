@@ -8,7 +8,7 @@ Create Date: 2019-05-18 22:58:06.487489
 import time
 
 from alembic import op
-from sqlalchemy import column, CheckConstraint
+from sqlalchemy import column, CheckConstraint, inspect
 from sqlalchemy.orm import relationship, backref
 from sqlalchemy import (
     Column, String, Float, ForeignKey, Integer, CheckConstraint,
@@ -164,6 +164,10 @@ def upgrade():
     # in Alembic's ability to reflect CHECK constraints, as described in
     # https://alembic.sqlalchemy.org/en/latest/batch.html#working-in-offline-mode
     bind = op.get_bind()
+
+    # Create tables
+    Base.metadata.create_all(bind.engine, checkfirst=True)
+
     with op.batch_alter_table("experiments", copy_from=SqlExperiment.__table__) as batch_op:
         # We skip running drop_constraint for mysql, because it creates an invalid statement
         # in alembic<=1.0.10
