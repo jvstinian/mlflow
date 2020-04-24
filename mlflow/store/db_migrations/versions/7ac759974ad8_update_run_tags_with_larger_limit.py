@@ -7,7 +7,7 @@ Create Date: 2019-07-30 16:36:54.256382
 """
 from alembic import op
 import sqlalchemy as sa
-from mlflow.store.dbmodels.initial_models import SqlTag, SqlParam
+from mlflow.store.tracking.dbmodels.initial_models import SqlTag, SqlParam
 
 
 # revision identifiers, used by Alembic.
